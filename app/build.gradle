@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation project(Modules.network)
+    implementation project(Modules.cache)
 
     implementation Libraries.kotlin
 

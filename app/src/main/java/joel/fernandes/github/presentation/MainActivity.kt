@@ -1,7 +1,8 @@
-package joel.fernandes.github
+package joel.fernandes.github.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import joel.fernandes.github.R
 
 class MainActivity : AppCompatActivity() {
 
