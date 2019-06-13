@@ -4,6 +4,7 @@ object ApplicationId {
 
 object Modules {
     val app = ":app"
+    val network = ":network"
 }
 
 
