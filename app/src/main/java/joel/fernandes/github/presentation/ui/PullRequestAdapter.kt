@@ -1,14 +1,19 @@
 package joel.fernandes.github.presentation.ui
 
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.bold
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import joel.fernandes.github.R
 import joel.fernandes.github.datasource.model.PullRequest
+import joel.fernandes.github.getTimeAgo
 import joel.fernandes.github.presentation.databinding.BindableAdapter
 import kotlinx.android.synthetic.main.item_pull_request.view.*
-import java.lang.StringBuilder
+
 
 class PullRequestAdapter : RecyclerView.Adapter<PullRequestAdapter.ViewHolder>(),
     BindableAdapter<PullRequest> {
@@ -23,11 +28,7 @@ class PullRequestAdapter : RecyclerView.Adapter<PullRequestAdapter.ViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
-            inflater.inflate(
-                R.layout.item_pull_request,
-                parent,
-                false
-            )
+            inflater.inflate(R.layout.item_pull_request, parent, false)
         )
     }
 
@@ -40,13 +41,18 @@ class PullRequestAdapter : RecyclerView.Adapter<PullRequestAdapter.ViewHolder>()
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(pullRequest: PullRequest) {
-            itemView.text.text = StringBuilder()
-                .append(pullRequest.title)
-                .append("\n\n")
-                .append(pullRequest.body)
-                .append("\n\n")
-                .append(pullRequest.createdOn)
-                .toString()
+            itemView.tvPullTitle.text = pullRequest.title
+            itemView.tvPullDescription.text = SpannableStringBuilder()
+                .bold { append("#${pullRequest.pullReqNumber}") }
+                .append(" ${pullRequest.user.username} wants to merge ")
+                .bold { append(pullRequest.head.ref) }
+                .append(" to ")
+                .bold { append(pullRequest.base.ref) }
+            itemView.tvTimestamp.text = getTimeAgo(pullRequest.createdOn)
+            Glide.with(itemView.imgAvatar.context)
+                .load(pullRequest.user.avatar)
+                .apply(RequestOptions.circleCropTransform())
+                .into(itemView.imgAvatar)
         }
     }
 
