@@ -29,8 +29,9 @@ private fun httpClient(debug: Boolean, apiKey : String, apiKeyParamName : String
             override fun intercept(chain: Interceptor.Chain): Response {
                 val original = chain.request()
                 val originalHttpUrl = original.url()
-                val requestBuilder = original.newBuilder().url(
-                    originalHttpUrl.newBuilder()
+                val requestBuilder = original.newBuilder()
+                    .addHeader("Accept", "application/vnd.github.v3+json")
+                    .url(originalHttpUrl.newBuilder()
                         .addQueryParameter(apiKeyParamName, apiKey).build()
                 )
 

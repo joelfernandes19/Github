@@ -5,24 +5,33 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import joel.fernandes.github.datasource.model.PullRequestsList
+import joel.fernandes.github.datasource.model.RepoDetails
 import joel.fernandes.github.domain.usecases.UCGithubRepos
 
 class GithubViewModel constructor(private val githubUseCases : UCGithubRepos) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     val pullRequestsList = MutableLiveData<PullRequestsList>()
+    val repoDetails = MutableLiveData<RepoDetails>()
 
-    fun getPullRequests(owner : String, repo : String, state : String) =
-        compositeDisposable.add(githubUseCases.getPullRequests(owner, repo, state)
+    fun getRepoDetails(owner : String, repo : String) = compositeDisposable.add(githubUseCases.getRepoDetails(owner, repo)
+        .subscribeOn(Schedulers.io())
+        .subscribe({
+            repoDetails.postValue(it)
+        }, {
+            it.printStackTrace()
+        })
+    )
+
+
+    fun getPullRequests(owner : String, repo : String, state : String, page : Int) =
+        compositeDisposable.add(githubUseCases.getPullRequests(owner, repo, state, page)
             .subscribeOn(Schedulers.io())
             .map {
                 it
             }
             .subscribe({
-                if(!it.list.isNullOrEmpty()) {
-                    pullRequestsList.postValue(it)
-                }
-
+                pullRequestsList.postValue(it)
             }, {
                 it.printStackTrace()
             })
