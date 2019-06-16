@@ -1,2 +1,8 @@
 # Github
-Github Android app to view open pull request of any public repositories
+Github Android app written in **Kotlin** to view open pull request of any public repositories
+
+User
+
+- MVVM
+- Databinding
+- RxAndroid, RxJava
