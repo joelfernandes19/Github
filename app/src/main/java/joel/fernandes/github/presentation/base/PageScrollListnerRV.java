@@ -1,4 +1,4 @@
-package joel.fernandes.github.presentation;
+package joel.fernandes.github.presentation.base;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

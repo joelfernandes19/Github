@@ -2,7 +2,6 @@ package joel.fernandes.github.presentation.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,14 +13,16 @@ import joel.fernandes.github.databinding.ActivityMainBinding
 import joel.fernandes.github.datasource.model.PullRequest
 import joel.fernandes.github.getTimeAgo
 import joel.fernandes.github.injectModules
-import joel.fernandes.github.presentation.PageScrollListnerRV
+import joel.fernandes.github.presentation.base.BaseActivity
+import joel.fernandes.github.presentation.base.PageScrollListnerRV
+import joel.fernandes.github.presentation.base.StateData
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_input.view.*
 import kotlinx.android.synthetic.main.include_repo_details_card.*
-import kotlinx.android.synthetic.main.input_dialog.view.*
 import org.koin.androidx.viewmodel.ext.viewModel
 
 
-class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
+class MainActivity : BaseActivity(), AppBarLayout.OnOffsetChangedListener {
 
     private val vm : GithubViewModel by viewModel()
 
@@ -36,39 +37,62 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     private var repo = "okhttp"
     private val state = "open"
 
+    private lateinit var adapter: PullRequestAdapter
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var inputDialog : AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView(this, R.layout.activity_main) as ActivityMainBinding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main) as ActivityMainBinding
         injectModules()
+        initInputDialog()
 
-        val adapter = PullRequestAdapter()
+        adapter = PullRequestAdapter()
         binding.rvPullRequests.adapter = adapter
 
-        vm.repoDetails.observe(this, Observer { repoDetails ->
-            this.repoTitle = repoDetails.fullName
-            binding.abl.addOnOffsetChangedListener(this)
-            Glide.with(imgRepoLogo)
-                .load(repoDetails.owner.avatar)
-                .apply(RequestOptions.circleCropTransform())
-                .into(imgRepoLogo)
-            binding.repo = repoDetails
-            binding.lastUpdated = getTimeAgo(repoDetails.lastUpdated)
+        vm.repoDetails.observe(this, Observer { result ->
+            when(result.status) {
+                StateData.DataStatus.SUCCESS -> {
+                    val repoDetails = result.data!!
+                    this.repoTitle = repoDetails.fullName
+                    binding.abl.addOnOffsetChangedListener(this)
+                    Glide.with(imgRepoLogo)
+                        .load(repoDetails.owner.avatar)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imgRepoLogo)
+                    binding.repo = repoDetails
+                    binding.lastUpdated = getTimeAgo(repoDetails.lastUpdated)
+
+                }
+                StateData.DataStatus.ERROR -> { }
+            }
         })
 
 
-        vm.pullRequestsList.observe(this, Observer {
-            loadingNextPage = false
-            if(it.list.isNullOrEmpty()) {
-                lastPage = true
-            } else {
-                if(binding.pulls != null) {
-                    val data = binding.pulls
-                    (data!!.list as ArrayList<PullRequest>).addAll(data.list.size, it.list)
-                    binding.pulls = data
-                } else {
-                    binding.pulls = it
+        vm.pullRequestsList.observe(this, Observer { result ->
+            when(result.status) {
+                StateData.DataStatus.SUCCESS -> {
+                    loadingNextPage = false
+                    if(result.data!!.list.isNullOrEmpty()) {
+                        lastPage = true
+                    } else {
+                        if(binding.pulls != null) {
+                            val data = binding.pulls
+                            (data!!.list as ArrayList<PullRequest>).addAll(data.list.size, result.data!!.list)
+                            binding.pulls = data
+                        } else {
+                            binding.pulls = result.data!!
+                        }
+                    }
+                }
+
+                StateData.DataStatus.ERROR -> {
+                    showToast(result.error)
+                    inputDialog.show()
                 }
             }
+            hideLoading()
         })
 
 
@@ -93,13 +117,14 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             }
         })
 
-        showDialog()
+        bntChangeRepo.setOnClickListener { inputDialog.show() }
+
+        inputDialog.show()
     }
 
-    private fun showDialog() {
-        val dialogBuilder = AlertDialog.Builder(this).create()
-        val inflater = layoutInflater
-        val dialogView = inflater.inflate(R.layout.input_dialog, null)
+    private fun initInputDialog() {
+        inputDialog = AlertDialog.Builder(this).create()
+        val dialogView = layoutInflater.inflate(R.layout.dialog_input, null)
 
         dialogView.btnGo.setOnClickListener {
             if(dialogView.etOwner.text.isNullOrEmpty()) {
@@ -107,21 +132,22 @@ class MainActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
             } else if(dialogView.etRepo.text.isNullOrEmpty()) {
                 dialogView.etRepo.error = "Enter repo"
             } else {
+                showLoading()
+                if(binding.pulls != null) (binding.pulls!!.list as ArrayList).clear()
                 owner = dialogView.etOwner.text.toString()
                 repo = dialogView.etRepo.text.toString()
                 currentPage = 1
                 vm.getRepoDetails(owner, repo)
                 vm.getPullRequests(owner, repo, state, currentPage)
-                dialogBuilder.dismiss()
+                inputDialog.dismiss()
             }
         }
 
         dialogView.btnCancel.setOnClickListener {
-            dialogBuilder.dismiss()
+            inputDialog.dismiss()
         }
 
-        dialogBuilder.setView(dialogView)
-        dialogBuilder.show()
+        inputDialog.setView(dialogView)
     }
 
 

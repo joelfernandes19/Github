@@ -40,11 +40,13 @@ object Versions {
     val paperdb = "2.6"
     val koin = "2.0.0-alpha-6"
     val timber = "4.7.1"
-    val rxjava = "2.2.5"
+    val rxjava = "2.2.9"
+    val rxandroid = "2.1.1"
     val rxkotlin = "2.3.0"
     val retrofit = "2.5.0"
     val loggingInterceptor = "3.12.1"
     val glide = "4.9.0"
+    val lottieVersion = "3.0.6"
 }
 
 object SupportLibraries {
@@ -74,6 +76,7 @@ object Libraries {
     val paperdb = "io.paperdb:paperdb:${Versions.paperdb}"
 
     val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
+    val rxandroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
     val rxkotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}"
 
     val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
@@ -83,6 +86,8 @@ object Libraries {
     val rxjavaAdapter = "com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}"
     val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
     val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
+
+    val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
 
     val koin = "org.koin:koin-android:${Versions.koin}"
     val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"

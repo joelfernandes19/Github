@@ -22,7 +22,7 @@
                 android:id="@+id/etOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text|number"
+                android:inputType="text"
                 android:hint="Owner Name"
                 android:text="square"/>
 
@@ -43,7 +43,7 @@
                 android:id="@+id/etRepo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text|number"
+                android:inputType="text"
                 android:hint="Repo Name"
                 android:text="okhttp"/>
 
