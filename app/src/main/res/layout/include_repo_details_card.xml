@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable name="repo"
+                  type="joel.fernandes.github.datasource.model.RepoDetails" />
+
+        <variable name="lastUpdated" type="String" />
+        <import type="android.text.format.Formatter" />
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewRepoDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="4dp"
+            android:visibility="@{repo != null ? View.VISIBLE : View.GONE}"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+            <ImageView
+                    android:id="@+id/imgRepoLogo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@mipmap/ic_launcher"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                    android:id="@+id/tvRepoTitle"
+                    android:layout_width="299dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#242021"
+                    android:textSize="16sp"
+                    android:text="@{repo.fullName}"
+                    android:layout_marginStart="8dp"
+                    tools:text="Hide Kotlin-internal APIs from Java"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imgRepoLogo" />
+
+            <TextView
+                    android:id="@+id/tvRepoMeta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#9B9B9B"
+                    android:fontFamily="sans-serif"
+                    android:text="@{`Last updated: ` + lastUpdated  + `\n` + `Size: ` + Formatter.formatFileSize(context, repo.size * 1000)}"
+                    tools:text="20 minutes ago, 100 MB"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRepoTitle"
+                    app:layout_constraintStart_toStartOf="@+id/tvRepoTitle"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/tvRepoWatchers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`` + repo.watchersCount}"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:drawableTop="@drawable/ic_visibility_24px"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="8dp"
+                    android:padding="4dp"
+                    tools:text="1,292"
+                    app:layout_constraintTop_toBottomOf="@+id/imgRepoLogo"
+                    app:layout_constraintStart_toStartOf="@+id/imgRepoLogo"/>
+
+            <TextView
+                    android:id="@+id/tvRepoStars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`` + repo.starsCount}"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:drawableTop="@drawable/ic_star_border_24px"
+                    android:drawablePadding="8dp"
+                    android:padding="4dp"
+                    tools:text="20,320"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@+id/tvRepoWatchers"
+                    app:layout_constraintTop_toTopOf="@+id/tvRepoWatchers"/>
+
+            <TextView
+                    android:id="@+id/tvRepoForks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`` + repo.forksCount}"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:drawableTop="@drawable/ic_share_24px"
+                    android:drawablePadding="8dp"
+                    android:padding="4dp"
+                    tools:text="400"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@+id/tvRepoStars"
+                    app:layout_constraintTop_toTopOf="@+id/tvRepoWatchers"/>
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#9B9B9B"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end|center"
+                    android:text="@{repo.language + `\n` + repo.license.name}"
+                    android:padding="4dp"
+                    tools:text="Apache License 2.0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

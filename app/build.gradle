@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion Versions.compileSdk
+    defaultConfig {
+        applicationId ApplicationId.id
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
+        versionCode Versions.appVersionCode
+        versionName Versions.appVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(Modules.network)
+    implementation project(Modules.cache)
+
+    implementation Libraries.kotlin
+    implementation Libraries.ktx
+
+    implementation SupportLibraries.appcompat
+    implementation SupportLibraries.constraintlayout
+    implementation SupportLibraries.cardview
+    implementation SupportLibraries.recyclerview
+    implementation SupportLibraries.design
+
+    implementation Libraries.gson
+    implementation Libraries.koin
+    implementation Libraries.koinViewModel
+
+    implementation Libraries.glide
+    annotationProcessor Libraries.glideCompiler
+
+    implementation Libraries.rxjava
+    implementation Libraries.rxandroid
+    implementation Libraries.rxkotlin
+    implementation Libraries.moshiConverter
+
+    implementation Libraries.lottie
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
