@@ -11,7 +11,7 @@ object Modules {
 
 object Versions {
     val kotlin = "1.3.30"
-    val ktx = "1.0.0-alpha1"
+    val ktx = "1.0.2"
 
     val appVersionCode = 1
     val appVersionName = "1.0.0"
@@ -44,6 +44,7 @@ object Versions {
     val rxkotlin = "2.3.0"
     val retrofit = "2.5.0"
     val loggingInterceptor = "3.12.1"
+    val glide = "4.9.0"
 }
 
 object SupportLibraries {
@@ -74,6 +75,9 @@ object Libraries {
 
     val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
     val rxkotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}"
+
+    val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
+    val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
 
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     val rxjavaAdapter = "com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}"
