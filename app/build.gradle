@@ -31,6 +31,7 @@ dependencies {
     implementation project(Modules.cache)
 
     implementation Libraries.kotlin
+    implementation Libraries.ktx
 
     implementation SupportLibraries.appcompat
     implementation SupportLibraries.constraintlayout
@@ -41,6 +42,9 @@ dependencies {
     implementation Libraries.gson
     implementation Libraries.koin
     implementation Libraries.koinViewModel
+
+    implementation Libraries.glide
+    annotationProcessor Libraries.glideCompiler
 
     implementation Libraries.rxjava
     implementation Libraries.rxkotlin
